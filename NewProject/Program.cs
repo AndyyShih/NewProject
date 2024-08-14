@@ -1,4 +1,6 @@
 using System.Reflection;
+using DataAccess;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,6 +12,8 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
+
+#region SwaggerUI
 
 builder.Services.AddSwaggerGen(c =>
 {
@@ -29,6 +33,15 @@ if (app.Environment.IsDevelopment())
     });
 }
 
+#endregion
+
+#region Database
+
+builder.Services.AddDbContext<ProjectContext>(option =>
+    option.UseSqlServer(builder.Configuration.GetConnectionString("NewProject_Db"))
+);
+
+#endregion
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
