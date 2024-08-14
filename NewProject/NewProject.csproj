@@ -23,6 +23,8 @@
 
   <ItemGroup>
     <Folder Include="Controllers\" />
+    <ProjectReference Include="..\BusinessRule\BusinessRule.csproj" />
+		<ProjectReference Include="..\Common\Common.csproj" />
     <ProjectReference Include="..\DataAccess\DataAccess.csproj" />
   </ItemGroup>
 
