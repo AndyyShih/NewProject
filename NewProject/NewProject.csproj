@@ -23,6 +23,7 @@
 
   <ItemGroup>
     <Folder Include="Controllers\" />
+    <Folder Include="DependencyInjectionTool\" />
     <ProjectReference Include="..\BusinessRule\BusinessRule.csproj" />
 		<ProjectReference Include="..\Common\Common.csproj" />
     <ProjectReference Include="..\DataAccess\DataAccess.csproj" />

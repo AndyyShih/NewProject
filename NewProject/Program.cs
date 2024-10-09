@@ -17,10 +17,20 @@ var app = builder.Build();
 
 builder.Services.AddSwaggerGen(c =>
 {
-    // 讀取 XML 檔案產生 API 說明
+    // 載入主專案的 XML 註解檔案
     var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
     var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
     c.IncludeXmlComments(xmlPath);
+
+    //載入其他類別庫的 XML 註解檔案
+    var businessRuleXml = Path.Combine(AppContext.BaseDirectory,"BusinessRule.xml");
+    var dataAccessXml = Path.Combine(AppContext.BaseDirectory,"DataAccess.xml");
+    var commonXml = Path.Combine(AppContext.BaseDirectory,"Common.xml");
+
+    c.IncludeXmlComments(businessRuleXml);
+    c.IncludeXmlComments(dataAccessXml);
+    c.IncludeXmlComments(commonXml);
+
 });
 
 //版本描述
