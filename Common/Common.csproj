@@ -9,9 +9,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Extension\" />
     <Folder Include="Enums\" />
     <Folder Include="Ultilitis\" />
+    <Foldrr Include="Extensions" />
   </ItemGroup>
 
   <ItemGroup>
