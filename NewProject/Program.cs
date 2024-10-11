@@ -1,6 +1,7 @@
 using System.Reflection;
 using DataAccess;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.OpenApi.Models;
 using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -18,6 +19,13 @@ var app = builder.Build();
 
 builder.Services.AddSwaggerGen(c =>
 {
+    c.SwaggerDoc("v1", new OpenApiInfo
+    {
+        Title = "NewProject",
+        Version = "2024.10.11",
+        Description = "空專案範本",
+    });
+
     // 載入主專案的 XML 註解檔案
     var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
     var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
