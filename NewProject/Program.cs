@@ -3,6 +3,7 @@ using BusinessRule.Middleware;
 using DataAccess;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
+using NewProject.DependencyInjectionTool;
 using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -14,7 +15,8 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-var app = builder.Build();
+//引用DI註冊方法
+DependencyInjectionTool.AddDIContainer(builder.Services);
 
 #region Cors Setting
 
@@ -27,7 +29,6 @@ builder.Services.AddCors(options =>
 });
 
 #endregion
-
 
 #region SwaggerUI
 
@@ -56,16 +57,6 @@ builder.Services.AddSwaggerGen(c =>
 
 });
 
-//版本描述
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI(c =>
-    {
-        c.SwaggerEndpoint("/swagger/v1/swagger.json", "NewProject V1");
-    });
-}
-
 #endregion
 
 #region Database
@@ -86,6 +77,8 @@ Log.Logger = new LoggerConfiguration()
     .CreateLogger();
 
 #endregion
+
+var app = builder.Build();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

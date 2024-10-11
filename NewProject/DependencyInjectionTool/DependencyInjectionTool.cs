@@ -1,12 +1,16 @@
-﻿namespace NewProject.DependencyInjectionTool
+﻿using DataAccess.Extensions;
+
+namespace NewProject.DependencyInjectionTool
 {
     public static class DependencyInjectionTool
     {
         public static void AddDIContainer(IServiceCollection services)
         {
+            services.AddScoped<IDbConnectionFactory , SqlConnectionFactory>();
+
             // 掃描 Service 和 Repository 類別
-            var servs = typeof(BusinessRule.Services.DemoService).Assembly;
-            var repos = typeof(DataAccess.Repository.DemoRepository).Assembly;
+            var servs = typeof(BusinessRule.Services.UserService).Assembly;
+            var repos = typeof(DataAccess.Repository.UserRepository).Assembly;
 
             // Service 類別
             var serviceTypes = servs.GetExportedTypes()
