@@ -1,6 +1,7 @@
 using System.Reflection;
 using DataAccess;
 using Microsoft.EntityFrameworkCore;
+using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -50,6 +51,17 @@ if (app.Environment.IsDevelopment())
 builder.Services.AddDbContext<ProjectContext>(option =>
     option.UseSqlServer(builder.Configuration.GetConnectionString("NewProject_Db"))
 );
+
+#endregion
+
+#region Serilog
+
+Log.Logger = new LoggerConfiguration()
+    .WriteTo.File(
+    path: "logs/log-.txt",
+    rollingInterval: RollingInterval.Day,
+    outputTemplate: "{Timestamp:yyyy-MM-dd HH:mm:ss} [{Level:u3}] {Message:lj}{NewLine}{Exception}")
+    .CreateLogger();
 
 #endregion
 
