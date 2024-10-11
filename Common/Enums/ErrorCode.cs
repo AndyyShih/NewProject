@@ -48,6 +48,11 @@ namespace Common.Enums
         /// 請求參數格式錯誤 ErrorCode:9
         /// </summary>
         [Description("請求參數格式錯誤")]
-        ERROR_REQUEST_PARAMETERS_FORMAT = 9
+        ERROR_REQUEST_PARAMETERS_FORMAT = 9,
+        /// <summary>
+        /// 查無資料
+        /// </summary>
+        [Description("查無資料")]
+        DATA_EMPTY = 0
     }
 }
