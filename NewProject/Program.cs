@@ -59,14 +59,6 @@ builder.Services.AddSwaggerGen(c =>
 
 #endregion
 
-#region Database
-
-builder.Services.AddDbContext<ProjectContext>(option =>
-    option.UseSqlServer(builder.Configuration.GetConnectionString("NewProject_Db"))
-);
-
-#endregion
-
 #region Serilog
 
 Log.Logger = new LoggerConfiguration()
