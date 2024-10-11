@@ -1,4 +1,5 @@
 using System.Reflection;
+using BusinessRule.Middleware;
 using DataAccess;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
@@ -14,6 +15,19 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
+
+#region Cors Setting
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(name: "AllowSpecificOrigin", policy =>
+    {
+        policy.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod();
+    });
+});
+
+#endregion
+
 
 #region SwaggerUI
 
@@ -76,14 +90,16 @@ Log.Logger = new LoggerConfiguration()
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
+    
 }
 
+// 註冊全局異常處理中間件
+app.UseMiddleware<GlobalExceptionHandlerMiddleware>();
+
+app.UseSwagger();
+app.UseSwaggerUI();
 app.UseHttpsRedirection();
-
+app.UseCors("AllowSpecificOrigin");
 app.UseAuthorization();
-
 app.MapControllers();
-
 app.Run();
