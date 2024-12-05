@@ -26,7 +26,7 @@ namespace DataAccess.Extensions
         {
             var connectionString = source switch
             {
-                DatabaseSource.Spirit_Life => _configuration.GetConnectionString("NewProject_Db")
+                DatabaseSource.NewProject => _configuration.GetConnectionString("NewProject_Db")
             };
 
             if (string.IsNullOrEmpty(connectionString))
