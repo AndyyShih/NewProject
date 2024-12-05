@@ -14,9 +14,15 @@ namespace DataAccess.Repository
         {
             _connectionFactory = connectionFactory;
         }
+
+        /// <summary>
+        /// 取得單一使用者資料
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
         public async Task<GetUserOutputDto> GetUserAsync(GetUserInputDto input)
         {
-            using var connection = await _connectionFactory.CreateConnectionAsync(DatabaseSource.Spirit_Life);
+            using var connection = await _connectionFactory.CreateConnectionAsync(DatabaseSource.NewProject);
 
             var sql = @"Select *
                         From [User]
@@ -26,6 +32,26 @@ namespace DataAccess.Repository
             parameters.Add("Name", input.Name);
 
             var result = await connection.QueryFirstOrDefaultAsync<GetUserOutputDto>(sql, parameters);
+
+            return result;
+        }
+
+        /// <summary>
+        /// 新增使用者
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        public async Task<int> InsertUserAsync(InsertUserDto input)
+        {
+            using var connection = await _connectionFactory.CreateConnectionAsync(DatabaseSource.NewProject);
+
+            var sql = @"Insert Into [User](Name , Tel)
+                        Values (@Name , @Tel)";
+            var parameters = new DynamicParameters();
+            parameters.Add("Name", input.Name);
+            parameters.Add("Tel", input.Tel);
+
+            var result = await connection.ExecuteAsync(sql, parameters);
 
             return result;
         }

@@ -18,6 +18,11 @@ namespace NewProject.Controllers
             _userService = userService;
         }
 
+        /// <summary>
+        /// 取得單一使用者資料
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
         [HttpPost]
         [Route("GetUser")]
         public async Task<ApiResponse<GetUserOutputDto>> GetUserAsync(GetUserInputDto input)
@@ -33,6 +38,29 @@ namespace NewProject.Controllers
             {
                 Log.Information("查詢完成");
                 return ApiResponseFactory.CreateSuccessResult<GetUserOutputDto>(result);
+            }
+        }
+
+        /// <summary>
+        /// 新增使用者
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("InsertUser")]
+        public async Task<ApiResponse> InsertUserAsync(InsertUserDto input)
+        {
+            var result = await _userService.InsertUserAsync(input);
+
+            if (result == 0)
+            {
+                Log.Error("新增失敗");
+                return ApiResponseFactory.CreateErrorResult(ErrorCode.ERROR_SQLSERVER_UPDATE_FAILED);
+            }
+            else
+            {
+                Log.Information("新增成功");
+                return ApiResponseFactory.CreateSuccessResult();
             }
         }
     }
