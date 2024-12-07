@@ -3,6 +3,7 @@ using Dapper;
 using DataAccess.DTOs.User;
 using DataAccess.Extensions;
 using DataAccess.IRepository;
+using System.Text;
 
 namespace DataAccess.Repository
 {
@@ -16,22 +17,40 @@ namespace DataAccess.Repository
         }
 
         /// <summary>
-        /// 取得單一使用者資料
+        /// 取得使用者資料
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        public async Task<GetUserOutputDto> GetUserAsync(GetUserInputDto input)
+        public async Task<List<GetUserOutputDto>> GetUserAsync(GetUserInputDto input)
         {
             using var connection = await _connectionFactory.CreateConnectionAsync(DatabaseSource.NewProject);
 
-            var sql = @"Select *
-                        From [User]
-                        Where [Name] like '%' + @Name + '%'";
+            var sql = new StringBuilder ("Select * From [User] Where 1=1");
 
             var parameters = new DynamicParameters();
-            parameters.Add("Name", input.Name);
 
-            var result = await connection.QueryFirstOrDefaultAsync<GetUserOutputDto>(sql, parameters);
+            if (input.ID.HasValue)
+            {
+                sql.Append(" And ID = @ID ");
+                parameters.Add("ID", input.ID);
+
+            }
+
+            if (!string.IsNullOrWhiteSpace(input.Name))
+            {
+                sql.Append(" And Name like '%' + @Name + '%' ");
+                parameters.Add("Name", input.Name);
+
+            }
+
+            if (!string.IsNullOrWhiteSpace(input.Tel))
+            {
+                sql.Append(" And Tel = @Tel ");
+                parameters.Add("Tel", input.Tel);
+
+            }
+
+            var result = (await connection.QueryAsync<GetUserOutputDto>(sql.ToString(), parameters)).ToList();
 
             return result;
         }
@@ -50,6 +69,49 @@ namespace DataAccess.Repository
             var parameters = new DynamicParameters();
             parameters.Add("Name", input.Name);
             parameters.Add("Tel", input.Tel);
+
+            var result = await connection.ExecuteAsync(sql, parameters);
+
+            return result;
+        }
+
+        /// <summary>
+        /// 修改使用者資料
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        public async Task<int> UpdateUserAsync(UpdateUserDto input)
+        {
+            using var connection = await _connectionFactory.CreateConnectionAsync(DatabaseSource.NewProject);
+
+            var sql = @"Update [User]
+                        Set Name = @Name , Tel = @Tel
+                        Where ID = @ID";
+
+            var parameters = new DynamicParameters();
+            parameters.Add("ID", input.ID);
+            parameters.Add("Name", input.Name);
+            parameters.Add("Tel", input.Tel);
+
+            var result = await connection.ExecuteAsync(sql, parameters);
+
+            return result;
+        }
+
+        /// <summary>
+        /// 刪除使用者資料
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        public async Task<int> DeleteUserAsync(DeleteUserDto input)
+        {
+            using var connection = await _connectionFactory.CreateConnectionAsync(DatabaseSource.NewProject);
+
+            var sql = @"Delete From [User]
+                        Where ID = @ID";
+
+            var parameters = new DynamicParameters();
+            parameters.Add("ID", input.ID);
 
             var result = await connection.ExecuteAsync(sql, parameters);
 

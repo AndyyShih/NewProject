@@ -19,25 +19,25 @@ namespace NewProject.Controllers
         }
 
         /// <summary>
-        /// 取得單一使用者資料
+        /// 取得使用者資料
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
         [HttpPost]
         [Route("GetUser")]
-        public async Task<ApiResponse<GetUserOutputDto>> GetUserAsync(GetUserInputDto input)
+        public async Task<ApiResponse<List<GetUserOutputDto>>> GetUserAsync(GetUserInputDto input)
         {
             var result = await _userService.GetUserAsync(input);
 
             if (result == null)
             {
                 Log.Error("查無資料");
-                return ApiResponseFactory.CreateErrorResult<GetUserOutputDto>(ErrorCode.DATA_EMPTY, result);
+                return ApiResponseFactory.CreateErrorResult<List<GetUserOutputDto>>(ErrorCode.DATA_EMPTY, result);
             }
             else
             {
                 Log.Information("查詢完成");
-                return ApiResponseFactory.CreateSuccessResult<GetUserOutputDto>(result);
+                return ApiResponseFactory.CreateSuccessResult<List<GetUserOutputDto>>(result);
             }
         }
 
@@ -60,6 +60,51 @@ namespace NewProject.Controllers
             else
             {
                 Log.Information("新增成功");
+                return ApiResponseFactory.CreateSuccessResult();
+            }
+        }
+
+        /// <summary>
+        /// 修改使用者資料
+        /// </summary>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("UpdateUser")]
+        public async Task<ApiResponse> UpdateUserAsync(UpdateUserDto input)
+        {
+            var result = await _userService.UpdateUserAsync(input);
+
+            if (result == 0)
+            {
+                Log.Error("更新失敗");
+                return ApiResponseFactory.CreateErrorResult(ErrorCode.ERROR_SQLSERVER_UPDATE_FAILED);
+            }
+            else
+            {
+                Log.Information("更新成功");
+                return ApiResponseFactory.CreateSuccessResult();
+            }
+        }
+
+        /// <summary>
+        /// 刪除使用者資料
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("DeleteUser")]
+        public async Task<ApiResponse> DeleteUserAsync(DeleteUserDto input)
+        {
+            var result = await _userService.DeleteUserAsync(input);
+
+            if (result == 0)
+            {
+                Log.Error("刪除失敗");
+                return ApiResponseFactory.CreateErrorResult(ErrorCode.ERROR_SQLSERVER_UPDATE_FAILED);
+            }
+            else
+            {
+                Log.Information("刪除成功");
                 return ApiResponseFactory.CreateSuccessResult();
             }
         }

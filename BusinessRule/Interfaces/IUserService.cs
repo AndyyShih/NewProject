@@ -5,16 +5,27 @@ namespace BusinessRule.Interfaces
     public interface IUserService
     {
         /// <summary>
-        /// 取得單一使用者資料
+        /// 取得使用者資料
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        Task<GetUserOutputDto> GetUserAsync(GetUserInputDto input);
+        Task<List<GetUserOutputDto>> GetUserAsync(GetUserInputDto input);
         /// <summary>
         /// 新增使用者
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
         Task<int> InsertUserAsync(InsertUserDto input);
+        /// <summary>
+        /// 修改使用者資料
+        /// </summary>
+        /// <returns></returns>
+        Task<int> UpdateUserAsync(UpdateUserDto input);
+        /// <summary>
+        /// 刪除使用者資料
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        Task<int> DeleteUserAsync(DeleteUserDto input);
     }
 }
